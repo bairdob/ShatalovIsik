@@ -17,6 +17,7 @@ message(STATUS "OpenCV library status:")
 message(STATUS "    version: ${OpenCV_VERSION}")
 message(STATUS "    libraries: ${OpenCV_LIBS}")
 message(STATUS "    include path: ${OpenCV_INCLUDE_DIRS}")
+set(CMAKE_CXX_STANDARD 17)
 
 if(CMAKE_VERSION VERSION_LESS "2.8.11")
   # Add OpenCV headers location to your include paths
@@ -25,6 +26,7 @@ endif()
 install(DIRECTORY data/ DESTINATION data)
 # Declare the executable target built from your sources
 add_executable(picture_test main.cpp)
+
 
 # Link your application with OpenCV libraries
 target_link_libraries(picture_test PRIVATE ${OpenCV_LIBS})
