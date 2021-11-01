@@ -15,14 +15,20 @@ const string LR = "CORNER_LR_LAT_PRODUCT";
 class Picture {
 private:
 	string txtFilePath;
-	map<string,double> angles;
+	map<string, double> angles;
+	map<string, double> delta;
 
 public:
 	Picture(string str){
 		txtFilePath = str;
 	};
 
-	void readAngles(){
+	void setData(){
+		setAngles();
+		setDelta();
+	}
+
+	void setAngles(){
 		std::ifstream infile(txtFilePath);
 	    if (!infile){
 	        std::cout << "Error in opening file !" << std::endl;            
@@ -54,11 +60,16 @@ public:
 	    double num = -1;
 
 	    if (pos != string::npos){
-            num = stod(line.substr(pos+24));
+            num = stod(line.substr(pos+24)); //stod = string to double
 	    }
 
 	    return num;
 	}	
+
+	void setDelta(){
+		delta["x"] = angles["UpperLeft"] - angles["LowerLeft"];
+		delta["y"] = angles["UpperRight"] - angles["LowerRight"];
+	}
 
 	void printAngles(){
 		cout.precision(10);
@@ -68,6 +79,14 @@ public:
 	    std::cout << "\n";
 	}
 
+
+	void printDelta(){
+		cout.precision(10);
+	    for (const auto& [key, value] : delta) {
+	        std::cout << "delta " << key << " = " << value << endl;
+	    }
+	    std::cout << "\n";		
+	}
 };
 
  //    CORNER_UL_LAT_PRODUCT = 52.66260
@@ -77,7 +96,8 @@ public:
 
 int main(){
 	Picture p("../data/LE07_L2SP_131024_20021005_20200916_02_T1_MTL.txt");
-	p.readAngles();
+	p.setData();
 	p.printAngles();
+	p.printDelta();
 	return 0;
 }
