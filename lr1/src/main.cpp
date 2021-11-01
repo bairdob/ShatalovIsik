@@ -36,19 +36,19 @@ public:
 
 	void setAngles(){
 		std::ifstream infile(txtFilePath);
-	    if (!infile){
-	        std::cout << "Error in opening file !" << std::endl;            
+		if (!infile){
+			std::cout << "Error in opening file !" << std::endl;            
 	    }
 
 		string line; 
-	    while (std::getline(infile, line)){
-	    	if (getAngleFromLine(line, UL) != -1){
-	    		angles["UpperLeft"] = getAngleFromLine(line, UL);
-	    	}
+		while (std::getline(infile, line)){
+			if (getAngleFromLine(line, UL) != -1){
+				angles["UpperLeft"] = getAngleFromLine(line, UL);
+			}
 
-	    	if (getAngleFromLine(line, UR) != -1){
-	    		angles["UpperRight"] = getAngleFromLine(line, UR);
-	    	}
+			if (getAngleFromLine(line, UR) != -1){
+				angles["UpperRight"] = getAngleFromLine(line, UR);
+			}
 
 			if (getAngleFromLine(line, LL) != -1){
 				angles["LowerLeft"] = getAngleFromLine(line, LL);
@@ -58,7 +58,6 @@ public:
 				angles["LowerRight"] = getAngleFromLine(line, LR);
 			}
 	    }   
-
 	};
 
 	double getAngleFromLine(string line, string str){
@@ -79,19 +78,19 @@ public:
 
 	void printAngles(){
 		cout.precision(10);
-	    for (const auto& [key, value] : angles) {
-	        std::cout << key << " = " << value << endl;
-	    }
-	    std::cout << "\n";
+		for (const auto& [key, value] : angles) {
+			std::cout << key << " = " << value << endl;
+		}
+		std::cout << "\n";
 	}
 
 
 	void printDelta(){
 		cout.precision(10);
-	    for (const auto& [key, value] : delta) {
-	        std::cout << "delta " << key << " = " << value << endl;
-	    }
-	    std::cout << "\n";		
+		for (const auto& [key, value] : delta) {
+			std::cout << "delta " << key << " = " << value << endl;
+		}
+		std::cout << "\n";		
 	}
 };
 
@@ -110,41 +109,39 @@ int main(){
 
 	Mat imgOriginal = imread("../data/LE07_L2SP_131024_20021005_20200916_02_T1_SR_B1.TIF", IMREAD_COLOR);
 
-    if(imgOriginal.empty()) {
-        std::cout << "Error: the image has been incorrectly loaded." << endl;
-        return 0; 
-    } 
+	if(imgOriginal.empty()) {
+		std::cout << "Error: the image has been incorrectly loaded." << endl;
+		return 0; 
+	} 
     
    	
-   	Mat thresh;
-    cvtColor(imgOriginal, thresh, COLOR_BGR2GRAY);
-    threshold(thresh, thresh, 0, 255, THRESH_BINARY);
+	Mat thresh;
+	cvtColor(imgOriginal, thresh, COLOR_BGR2GRAY);
+	threshold(thresh, thresh, 0, 255, THRESH_BINARY);
 	medianBlur(thresh, thresh, 5);
 
 	vector<Point2f> corners;
-    Mat copy = imgOriginal.clone();
-    goodFeaturesToTrack(thresh, corners, 10, 0.5, 3000, Mat(), 20, 3, false, 0.1 );
+	Mat copy = imgOriginal.clone();
+	goodFeaturesToTrack(thresh, corners, 10, 0.5, 3000, Mat(), 20, 3, false, 0.1 );
   
-    cout << "** Number of corners detected: " << corners.size() << endl;
-    for( size_t i = 0; i < corners.size(); i++ )
-    {
-        circle(copy, corners[i], 50, Scalar(0, 255, 0), FILLED );
+	cout << "** Number of corners detected: " << corners.size() << endl;
+	for( size_t i = 0; i < corners.size(); i++ ){
+		circle(copy, corners[i], 50, Scalar(0, 255, 0), FILLED );
+	}
+	cout << corners << endl;
 
-    }
-    cout << corners << endl;
+	Mat crop = imgOriginal(Range(1700,2000),Range(3000,3100));
 
-    Mat crop = imgOriginal(Range(1700,2000),Range(3000,3100));
-
-    cv::Point2f pt(2000 , 3180);
-    circle(copy, pt, 50, Scalar(0, 0, 255), FILLED );
+	cv::Point2f pt(2000 , 3180);
+	circle(copy, pt, 50, Scalar(0, 0, 255), FILLED );
     
-    cv::Rect rect(1750, 2950, 500, 500);
-    copy = imgOriginal(rect).clone();
-    //rectangle(copy, rect, cv::Scalar(0, 255, 255), 5,LINE_8);
+	cv::Rect rect(1750, 2950, 500, 500);
+	copy = imgOriginal(rect).clone();
+	//rectangle(copy, rect, cv::Scalar(0, 255, 255), 5,LINE_8);
     
-    cv::imshow("Output", copy);
-    imwrite("test.jpg", copy);
-    cv::waitKey(0);
+	cv::imshow("Output", copy);
+	imwrite("test.jpg", copy);
+	cv::waitKey(0);
 
 	return 0;
 }
