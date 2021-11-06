@@ -15,7 +15,7 @@
 
 <img src="pic/original.png" width=50% height=50%>
 
-Обрезанное изображение
+Изображение с целевым городом
 
 <img src="pic/cropped.png" width=50% height=50%>
 
