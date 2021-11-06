@@ -65,7 +65,7 @@ public:
 	    double num = -1;
 
 	    if (pos != string::npos){
-            num = stod(line.substr(pos+24)); //stod = string to double
+            	num = stod(line.substr(pos+24)); //stod = string to double
 	    }
 
 	    return num;
