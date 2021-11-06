@@ -38,7 +38,7 @@ public:
 		std::ifstream infile(txtFilePath);
 		if (!infile){
 			std::cout << "Error in opening file !" << std::endl;            
-	    }
+	    	}
 
 		string line; 
 		while (std::getline(infile, line)){
@@ -57,11 +57,11 @@ public:
 			if (getAngleFromLine(line, LR) != -1){
 				angles["LowerRight"] = getAngleFromLine(line, LR);
 			}
-	    }   
+	    	}   
 	};
 
-	double getAngleFromLine(string line, string str){
-	    size_t pos = line.find(str);
+	double getAngleFromLine(string line, string target){
+	    size_t pos = line.find(target);
 	    double num = -1;
 
 	    if (pos != string::npos){
@@ -78,19 +78,19 @@ public:
 
 	void printAngles(){
 		cout.precision(10);
-		for (const auto& [key, value] : angles) {
+		for (const auto& [key, value] : angles){
 			std::cout << key << " = " << value << endl;
 		}
-		std::cout << "\n";
+		cout << "\n";
 	}
 
 
 	void printDelta(){
 		cout.precision(10);
-		for (const auto& [key, value] : delta) {
+		for (const auto& [key, value] : delta){
 			std::cout << "delta " << key << " = " << value << endl;
 		}
-		std::cout << "\n";		
+		cout << "\n";		
 	}
 };
 
@@ -110,7 +110,7 @@ int main(){
 	Mat imgOriginal = imread("../data/LE07_L2SP_131024_20021005_20200916_02_T1_SR_B1.TIF", IMREAD_COLOR);
 
 	if(imgOriginal.empty()) {
-		std::cout << "Error: the image has been incorrectly loaded." << endl;
+		cout << "Error: the image has been incorrectly loaded." << endl;
 		return 0; 
 	} 
     
