@@ -23,29 +23,33 @@ int main(){
 	Mat numerator  = Mat::zeros(500, 500, 0);;
 	Mat denominator =  Mat::zeros(500, 500, 0);;
 	Mat floatMat = Mat::zeros(500, 500, CV_32FC1);
+
    	for (int i = 0; i < RED.rows; i++){
 		for (int j = 0; j < RED.cols; j++){
-				numerator.at<int>(j,i) = (RED.at<int>(j,i) - NIR.at<int>(j,i)) ;
-				denominator.at<int>(j,i) = (RED.at<int>(j,i) + NIR.at<int>(j,i));
-				floatMat.at<float>(j,i) = numerator.at<int>(j,i) / (denominator.at<int>(j,i) + 0.0001) ; // *255 
-			}
+			numerator.at<int>(j,i) = (RED.at<int>(j,i) - NIR.at<int>(j,i)) ;
+			denominator.at<int>(j,i) = (RED.at<int>(j,i) + NIR.at<int>(j,i));
+			floatMat.at<float>(j,i) = numerator.at<int>(j,i) / (denominator.at<int>(j,i) + 0.0001) ; // *255 
+		}
     }
-    subtract(RED, NIR, numerator);
+
     // cout << numerator;
     // cout << denominator;
 
-    
-    //imwrite("NDVI.jpg", NDVI);
 	// cv::imshow("RED", RED);
 	// cv::imshow("NIR", NIR);
-	cv::putText(numerator, "RED - NIR", Point(10, 50), FONT_HERSHEY_DUPLEX, 1.0, CV_RGB(118, 185, 0));
-	cv::putText(denominator, "RED + NIR", Point(10, 50), FONT_HERSHEY_DUPLEX, 1.0, CV_RGB(118, 185, 0));
-	cv::putText(floatMat, "NDVI", Point(10, 50), FONT_HERSHEY_DUPLEX, 1.0, CV_RGB(118, 185, 0));
+	
+	putText(numerator, "RED - NIR", Point(10, 50), FONT_HERSHEY_DUPLEX, 1.0, CV_RGB(118, 185, 0));
+	putText(denominator, "RED + NIR", Point(10, 50), FONT_HERSHEY_DUPLEX, 1.0, CV_RGB(118, 185, 0));
+	putText(floatMat, "NDVI", Point(10, 50), FONT_HERSHEY_DUPLEX, 1.0, CV_RGB(255, 255, 255));
 	//cvtColor(floatMat, NDVI, COLOR_GRAY2BGR);
-	cv::imshow("num", numerator);
-	cv::imshow("den", denominator);
-	cv::imshow("ndvi", floatMat);
-	cv::waitKey(0);
+	imshow("numerator", numerator);
+	imshow("denominator", denominator);
+	imshow("ndvi", floatMat);
+
+	// imwrite("RED-NIR.jpg", numerator);
+	// imwrite("RED+NIR.jpg", denominator);
+	// imwrite("NDVI.jpg", floatMat);
+	waitKey(0);
 
 	return 0;
 }
