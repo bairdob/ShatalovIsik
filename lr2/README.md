@@ -1,6 +1,6 @@
 ## Скриншоты
 
-<img src="pic/RED-NIR.jpg" width=50% height=50%>
+<img src="pic/NIR-RED.jpg" width=50% height=50%>
 
 <img src="pic/RED+NIR.jpg" width=50% height=50%>
 
