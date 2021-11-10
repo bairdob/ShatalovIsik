@@ -11,38 +11,42 @@ using namespace cv;
 
 int main(){
 
-	Mat red = imread("../data/RED.jpg",CV_8UC1);
-	Mat nir = imread("../data/NIR.jpg",CV_8UC1);
+	Mat red = imread("../data/RED.jpg");
+	Mat nir = imread("../data/NIR.jpg");
 
 	if(red.empty() || nir.empty()) {
 		std::cout << "Error: the image has been incorrectly loaded." << endl;
 		return 0; 
 	} 
 
-	Mat nirMinusRed  = Mat::zeros(500, 500, CV_8UC1);;
-	Mat nirPlusRed =  Mat::zeros(500, 500, CV_8UC1);;
-	Mat ndvi = Mat::zeros(500, 500, CV_32FC1);
+	//no proper way to load 32f by default
+	Mat red32f, nir32f, ndvi;
+	red.convertTo(red32f, CV_32F, 1.0/255.0);
+	nir.convertTo(nir32f, CV_32F, 1.0/255.0);
+	
+	ndvi = (nir32f-red32f) / (nir32f+red32f);
+	Mat nirMinusRed = nir32f-red32f;
+	Mat nirPlusRed = nir32f+red32f;
 
-   	for (int i = 0; i < red.rows; i++){
-		for (int j = 0; j < red.cols; j++){
-			nirMinusRed.at<int>(j,i) = nir.at<int>(j,i) - red.at<int>(j,i);
-			nirPlusRed.at<int>(j,i) = red.at<int>(j,i) + nir.at<int>(j,i);
-		}
-    }
-    ndvi = nirMinusRed / nirPlusRed;
-
-	putText(nirMinusRed, "NIR - RED", Point(10, 50), FONT_HERSHEY_DUPLEX, 1.0, CV_RGB(55, 255, 255));
-	putText(nirPlusRed, "RED + NIR", Point(10, 50), FONT_HERSHEY_DUPLEX, 1.0, CV_RGB(118, 185, 0));
+	putText(nirMinusRed, "NIR - RED", Point(10, 50), FONT_HERSHEY_DUPLEX, 1.0, CV_RGB(255, 255, 255));
+	putText(nirPlusRed, "RED + NIR", Point(10, 50), FONT_HERSHEY_DUPLEX, 1.0, CV_RGB(255	, 255, 255));
 	putText(ndvi, "NDVI", Point(10, 50), FONT_HERSHEY_DUPLEX, 1.0, CV_RGB(255, 255, 255));
 
-	imshow("NIR-RED", nirMinusRed);
-	imshow("NIR+RED", nirPlusRed);
-	imshow("NDVI", ndvi);
+	nirMinusRed.convertTo(nirMinusRed, CV_8U, 255.0);
+	nirPlusRed.convertTo(nirPlusRed, CV_8U, 255.0);
+	ndvi.convertTo(ndvi, CV_8U, 255.0);
 
-	// imwrite("NIR-RED.jpg", nirMinusRed);
-	// imwrite("RED+NIR.jpg", nirPlusRed);
+	//applyColorMap(ndvi, ndvi, COLORMAP_HOT);
+
+	imshow("nir-red", nirMinusRed);
+	imshow("nir+red", nirPlusRed);
+	imshow("ndvi", ndvi);
+
+	imwrite("NIR-RED.jpg", nirMinusRed);
+	imwrite("RED+NIR.jpg", nirPlusRed);
 	imwrite("NDVI.jpg", ndvi);
-	waitKey(0);
 
+
+	waitKey(0);
 	return 0;
 }

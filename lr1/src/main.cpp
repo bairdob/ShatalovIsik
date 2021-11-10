@@ -108,7 +108,7 @@ int main(){
 	p.printDelta();
 
 	Mat imgOriginal = imread("../data/LE07_L2SP_131024_20021005_20200916_02_T1_SR_B1.TIF", IMREAD_COLOR);
-
+	cout << "type"<<imgOriginal.type()<< endl;
 	if(imgOriginal.empty()) {
 		cout << "Error: the image has been incorrectly loaded." << endl;
 		return 0; 
