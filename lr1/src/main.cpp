@@ -9,10 +9,14 @@
 using namespace std;
 using namespace cv;
 
-const string UL = "CORNER_UL_LAT_PRODUCT";
-const string UR = "CORNER_UR_LAT_PRODUCT";
-const string LL = "CORNER_LL_LAT_PRODUCT";
-const string LR = "CORNER_LR_LAT_PRODUCT";
+const string UL_LAT = "CORNER_UL_LAT_PRODUCT";
+const string UL_LON = "CORNER_UL_LON_PRODUCT";
+const string UR_LAT = "CORNER_UR_LAT_PRODUCT";
+const string UR_LON = "CORNER_UR_LON_PRODUCT";
+const string LL_LAT = "CORNER_LL_LAT_PRODUCT";
+const string LL_LON = "CORNER_LL_LON_PRODUCT";
+const string LR_LAT = "CORNER_LR_LAT_PRODUCT";
+const string LR_LON = "CORNER_LR_LON_PRODUCT";
 
 const float city_latitude = 51.8333;
 const float city_lantitude = 107.6167;
@@ -42,25 +46,38 @@ public:
 
 		string line; 
 		while (std::getline(infile, line)){
-			if (getAngleFromLine(line, UL) != -1){
-				angles["UpperLeft"] = getAngleFromLine(line, UL);
+			if (getCornerFromLine(line, UL_LAT) != -1){
+				angles[UL_LAT] = getCornerFromLine(line, UL_LAT);
+			}
+			if (getCornerFromLine(line, UL_LON) != -1){
+				angles[UL_LON] = getCornerFromLine(line, UL_LON);
 			}
 
-			if (getAngleFromLine(line, UR) != -1){
-				angles["UpperRight"] = getAngleFromLine(line, UR);
+
+			if (getCornerFromLine(line, UR_LAT) != -1){
+				angles[UR_LAT] = getCornerFromLine(line, UR_LAT);
+			}
+			if (getCornerFromLine(line, UR_LON) != -1){
+				angles[UR_LON] = getCornerFromLine(line, UR_LON);
 			}
 
-			if (getAngleFromLine(line, LL) != -1){
-				angles["LowerLeft"] = getAngleFromLine(line, LL);
+			if (getCornerFromLine(line, LL_LAT) != -1){
+				angles[LL_LAT] = getCornerFromLine(line, LL_LAT);
 			}
+			if (getCornerFromLine(line, LL_LON) != -1){
+				angles[LL_LON] = getCornerFromLine(line, LL_LON);
+			}			
 
-			if (getAngleFromLine(line, LR) != -1){
-				angles["LowerRight"] = getAngleFromLine(line, LR);
+			if (getCornerFromLine(line, LR_LAT) != -1){
+				angles[LR_LAT] = getCornerFromLine(line, LR_LAT);
 			}
-	    	}   
+			if (getCornerFromLine(line, LR_LON) != -1){
+				angles[LR_LON] = getCornerFromLine(line, LR_LON);
+			}				
+	    }   
 	};
 
-	double getAngleFromLine(string line, string target){
+	double getCornerFromLine(string line, string target){
 	    size_t pos = line.find(target);
 	    double num = -1;
 
@@ -72,8 +89,8 @@ public:
 	}	
 
 	void setDelta(){
-		delta["x"] = angles["UpperLeft"] - angles["LowerLeft"];
-		delta["y"] = angles["UpperRight"] - angles["LowerRight"];
+		delta["DELTA_LAT"] = abs(angles[UR_LAT] - angles[LL_LAT]);
+		delta["DELTA_LON"] = abs(angles[UR_LON] - angles[LL_LON]);
 	}
 
 	void printAngles(){
@@ -88,17 +105,11 @@ public:
 	void printDelta(){
 		cout.precision(10);
 		for (const auto& [key, value] : delta){
-			std::cout << "delta " << key << " = " << value << endl;
+			std::cout << key << " = " << value << endl;
 		}
 		cout << "\n";		
 	}
 };
-
- //    CORNER_UL_LAT_PRODUCT = 52.66260
- //    CORNER_UR_LAT_PRODUCT = 52.74104
- //    CORNER_LL_LAT_PRODUCT = 50.61285
- //    CORNER_LR_LAT_PRODUCT = 50.68576
-
 
 
 int main(){
@@ -108,13 +119,12 @@ int main(){
 	p.printDelta();
 
 	Mat imgOriginal = imread("../data/LE07_L2SP_131024_20021005_20200916_02_T1_SR_B1.TIF", IMREAD_COLOR);
-	cout << "type"<<imgOriginal.type()<< endl;
+
 	if(imgOriginal.empty()) {
 		cout << "Error: the image has been incorrectly loaded." << endl;
 		return 0; 
 	} 
     
-   	
 	Mat thresh;
 	cvtColor(imgOriginal, thresh, COLOR_BGR2GRAY);
 	threshold(thresh, thresh, 0, 255, THRESH_BINARY);
@@ -122,6 +132,7 @@ int main(){
 
 	vector<Point2f> corners;
 	Mat copy = imgOriginal.clone();
+
 	goodFeaturesToTrack(thresh, corners, 10, 0.5, 3000, Mat(), 20, 3, false, 0.1 );
   
 	cout << "** Number of corners detected: " << corners.size() << endl;
@@ -132,13 +143,17 @@ int main(){
 
 	Mat crop = imgOriginal(Range(1700,2000),Range(3000,3100));
 
-	cv::Point2f pt(2000 , 3180);
+	// cv::Point2f pt(2000 , 3180);
+	// circle(copy, pt, 50, Scalar(0, 0, 255), FILLED );
+
+	cout << corners[2].x << " " << corners[2].y << endl;
+	cv::Point2f pt(6191 , 7549);
 	circle(copy, pt, 50, Scalar(0, 0, 255), FILLED );
     
 	cv::Rect rect(1750, 2950, 500, 500);
-	copy = imgOriginal(rect).clone();
-	//rectangle(copy, rect, cv::Scalar(0, 255, 255), 5,LINE_8);
-    
+	rectangle(copy, rect, cv::Scalar(0, 255, 255), 5,LINE_8);
+
+    // copy = imgOriginal(rect).clone();
 	cv::imshow("Output", copy);
 	imwrite("test.jpg", copy);
 	cv::waitKey(0);
