@@ -19,7 +19,7 @@ const string LR_LAT = "CORNER_LR_LAT_PRODUCT";
 const string LR_LON = "CORNER_LR_LON_PRODUCT";
 
 const float cityLatitude = 51.8333;
-const float cityLontitude = 107.6167;
+const float cityLongitude = 107.6167;
 
 
 class Picture {
@@ -138,7 +138,7 @@ public:
 		double k2 = deltaCorners["DELTA_CORNER_Y"] / deltaAngles["DELTA_ANGLE_LON"];
 
 		cout << abs(angles[UL_LAT] - cityLatitude) * deltaCorners["DELTA_CORNER_X"] / 2 << endl;
-		cout << abs(angles[UL_LON] - cityLontitude) * deltaCorners["DELTA_CORNER_Y"] / 2 << endl;
+		cout << abs(angles[UL_LON] - cityLongitude) * deltaCorners["DELTA_CORNER_Y"] / 2 << endl;
 	}
 };
 
@@ -163,7 +163,7 @@ int main(){
 	Point2f ptCity(2000 , 3180); 
 	circle(imgCopy, ptCity, 50, Scalar(0, 0, 255), FILLED);
 
-	Point2f ptCityCalculated(2472 , 2924); 
+	Point2f ptCityCalculated(2472 , 2881); 
 	circle(imgCopy, ptCityCalculated, 50, Scalar(255, 0, 255), FILLED);
 	
 	Rect rect(1750, 2950, 500, 500);
