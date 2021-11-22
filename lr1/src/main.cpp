@@ -49,7 +49,7 @@ public:
 
 		if (!infile){
 			std::cout << "Error: in opening *.txt file" << std::endl;            
-	    }
+		}
 
 		string line; 
 		while (std::getline(infile, line)){
@@ -81,18 +81,18 @@ public:
 			if (getAngleFromLine(line, LR_LON) != -1){
 				angles[LR_LON] = getAngleFromLine(line, LR_LON);
 			}				
-	    }   
+		}   
 	};
 
 	double getAngleFromLine(string line, string target){
-	    size_t pos = line.find(target);
-	    double num = -1;
+		size_t pos = line.find(target);
+		double num = -1;
 
-	    if (pos != string::npos){
-            	num = stod(line.substr(pos+24)); //stod = string to double
-	    }
+		if (pos != string::npos){
+				num = stod(line.substr(pos+24)); //stod = string to double
+		}
 
-	    return num;
+		return num;
 	}	
 
 	void printMap(map<string, double> temp){
@@ -114,7 +114,7 @@ public:
 		if(imgOriginal.empty()) {
 			cout << "Error: the image has been incorrectly loaded." << endl;
 		} 
-	    
+		
 		Mat thresh;
 		cvtColor(imgOriginal, thresh, COLOR_BGR2GRAY);
 		threshold(thresh, thresh, 0, 255, THRESH_BINARY);
@@ -165,12 +165,12 @@ int main(){
 
 	Point2f ptCityCalculated(2472 , 2924); 
 	circle(imgCopy, ptCityCalculated, 50, Scalar(255, 0, 255), FILLED);
-    
+	
 	Rect rect(1750, 2950, 500, 500);
 	rectangle(imgCopy, rect, Scalar(0, 255, 255), 5,LINE_8);
 
 	Mat crop = imgOriginal(Range(1700,2000),Range(3000,3100));
-    crop = imgOriginal(rect).clone();
+	crop = imgOriginal(rect).clone();
 
 	imshow("Output", imgCopy);
 	imshow("crop", crop);
