@@ -29,22 +29,27 @@ int main(){
 	Mat nirPlusRed = nir32f+red32f;
 
 	putText(nirMinusRed, "NIR - RED", Point(10, 50), FONT_HERSHEY_DUPLEX, 1.0, CV_RGB(255, 255, 255));
-	putText(nirPlusRed, "RED + NIR", Point(10, 50), FONT_HERSHEY_DUPLEX, 1.0, CV_RGB(255	, 255, 255));
+	putText(nirPlusRed, "RED + NIR", Point(10, 50), FONT_HERSHEY_DUPLEX, 1.0, CV_RGB(255, 255, 255));
 	putText(ndvi, "NDVI", Point(10, 50), FONT_HERSHEY_DUPLEX, 1.0, CV_RGB(255, 255, 255));
 
 	nirMinusRed.convertTo(nirMinusRed, CV_8U, 255.0);
 	nirPlusRed.convertTo(nirPlusRed, CV_8U, 255.0);
 	ndvi.convertTo(ndvi, CV_8U, 255.0);
 
-	//applyColorMap(ndvi, ndvi, COLORMAP_HOT);
+	Mat colorNdvi = ndvi.clone();
+	normalize(colorNdvi, colorNdvi, 0, 255, NORM_MINMAX, CV_8UC1);
+	applyColorMap(colorNdvi, colorNdvi, COLORMAP_HSV);
+	putText(colorNdvi, "NDVI color", Point(10, 50), FONT_HERSHEY_DUPLEX, 1.0, CV_RGB(0, 0, 0));
 
 	imshow("nir-red", nirMinusRed);
 	imshow("nir+red", nirPlusRed);
 	imshow("ndvi", ndvi);
+	imshow("color ndvi", colorNdvi);
 
 	imwrite("NIR-RED.jpg", nirMinusRed);
 	imwrite("RED+NIR.jpg", nirPlusRed);
 	imwrite("NDVI.jpg", ndvi);
+	imwrite("NDVI_COLOR.jpg", colorNdvi);
 
 
 	waitKey(0);
