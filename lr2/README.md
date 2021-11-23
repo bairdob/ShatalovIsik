@@ -5,12 +5,14 @@
 Информация по спектрам снимка Landsat 7 - https://eos.com/landsat-7/
 
 ## Скриншоты
-
-<img src="pic/NIR-RED.jpg" width=50% height=50%>
-
-<img src="pic/RED+NIR.jpg" width=50% height=50%>
-
-<img src="pic/NDVI.jpg" width=50% height=50%>
+<p float="left">
+<img src="pic/NIR-RED.jpg" width=45% height=45%> 
+<img src="pic/RED+NIR.jpg" width=45% height=45%>
+</p>
+<p float="left">
+ <img src="pic/NDVI.jpg" width=45% height=45%>
+ <img src="pic/NDVI_COLOR.jpg" width=45% height=45%>
+</p>
 
 ## Компиляция
  ```
