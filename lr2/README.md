@@ -6,7 +6,9 @@
 
 ## NDVI
 NDVI is used to quantify vegetation greenness and is useful in understanding vegetation density and assessing changes in plant health. NDVI is calculated as a ratio between the red (R) and near infrared (NIR) values in traditional fashion: 
-(NIR - R) / (NIR + R)
+
+**(NIR - R) / (NIR + R)**
+
 In Landsat 4-7, NDVI = (Band 4 – Band 3) / (Band 4 + Band 3).
 
 ## Скриншоты
